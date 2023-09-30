@@ -23,9 +23,21 @@ func main() {
 		log.Println("No more entries.")
 	}(entries)
 
-	ctx, cancel := context.WithTimeout(context.Background(), time.Second*15)
+	ctx, cancel := context.WithTimeout(context.Background(), time.Second*5)
 	defer cancel()
 	err = resolver.Browse(ctx, "_shunkei_rx._udp", "local.", entries)
+	if err != nil {
+		log.Fatalln("Failed to browse:", err.Error())
+	}
+
+	entries = make(chan *zeroconf.ServiceEntry)
+	go func(results <-chan *zeroconf.ServiceEntry) {
+		for entry := range results {
+			log.Println(entry)
+		}
+		log.Println("No more entries.")
+	}(entries)
+	err = resolver.Browse(ctx, "_shunkei_tx._udp", "local.", entries)
 	if err != nil {
 		log.Fatalln("Failed to browse:", err.Error())
 	}
