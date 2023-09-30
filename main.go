@@ -1,14 +1,22 @@
 package main
 
 import (
-    "log"
-    "time"
-    "context"
+	"context"
+	"fmt"
+	"log"
+	"time"
 
 	"github.com/grandcat/zeroconf"
 )
 
 func main() {
+	fmt.Printf("IPv4 \thostname \tservice\n")
+	lookup("_shunkei_rx._udp")
+	lookup("_shunkei_tx._udp")
+
+}
+
+func lookup(query string) {
 	// Discover all services on the network (e.g. _workstation._tcp)
 	resolver, err := zeroconf.NewResolver(nil)
 	if err != nil {
@@ -18,30 +26,18 @@ func main() {
 	entries := make(chan *zeroconf.ServiceEntry)
 	go func(results <-chan *zeroconf.ServiceEntry) {
 		for entry := range results {
-			log.Println(entry)
+			for _, addr := range entry.AddrIPv4 {
+				fmt.Printf("%v \t%v \t%v\n", addr, entry.HostName, query)
+			}
 		}
-		log.Println("No more entries.")
 	}(entries)
 
-	ctx, cancel := context.WithTimeout(context.Background(), time.Second*5)
+	ctx, cancel := context.WithTimeout(context.Background(), time.Second*3)
 	defer cancel()
-	err = resolver.Browse(ctx, "_shunkei_rx._udp", "local.", entries)
-	if err != nil {
-		log.Fatalln("Failed to browse:", err.Error())
-	}
-
-	entries = make(chan *zeroconf.ServiceEntry)
-	go func(results <-chan *zeroconf.ServiceEntry) {
-		for entry := range results {
-			log.Println(entry)
-		}
-		log.Println("No more entries.")
-	}(entries)
-	err = resolver.Browse(ctx, "_shunkei_tx._udp", "local.", entries)
+	err = resolver.BrowseWithStrategy(ctx, query, "local.", zeroconf.ForceIPv4, entries)
 	if err != nil {
 		log.Fatalln("Failed to browse:", err.Error())
 	}
 
 	<-ctx.Done()
-
 }
