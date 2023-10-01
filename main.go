@@ -7,7 +7,7 @@ import (
 	"sync"
 	"time"
 
-	"github.com/grandcat/zeroconf"
+	"github.com/ebiyu/zeroconf"
 )
 
 func main() {

@@ -2,7 +2,7 @@ module github.com/shunkei-jp/find-shunkei
 
 go 1.20
 
-require github.com/grandcat/zeroconf v1.0.0
+require github.com/ebiyu/zeroconf v1.1.1
 
 require (
 	github.com/cenkalti/backoff v2.2.1+incompatible // indirect
