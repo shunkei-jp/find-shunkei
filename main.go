@@ -13,7 +13,7 @@ import (
 func main() {
 	fmt.Printf("IPv4 \thostname \tservice\n")
 
-	var queryes = []string{"_shunkei_rx._udp", "_shunkei_tx._udp", "_momo_tx._udp"}
+	var queryes = []string{"_shunkei_vtx_tx._tcp", "_shunkei_vtx_rx._tcp", "_momo_tx._udp"}
 
 	var wg sync.WaitGroup
 	for _, query := range queryes {
