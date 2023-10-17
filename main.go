@@ -37,7 +37,7 @@ func lookup(query string) {
 	go func(results <-chan *zeroconf.ServiceEntry) {
 		for entry := range results {
 			for _, addr := range entry.AddrIPv4 {
-				fmt.Printf("%v \t%v \t%v\n", addr, entry.HostName, query)
+                fmt.Printf("%v \t%v \t%v\thttp://%v/\n", addr, entry.HostName, query, addr)
 			}
 		}
 	}(entries)
