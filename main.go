@@ -65,7 +65,7 @@ func main() {
 	case <-done:
 		if found == 0 {
 			fmt.Fprintf(os.Stderr, "No device found\n")
-			os.Exit(1)
+			os.Exit(9)
 		} else {
 			fmt.Fprintf(os.Stderr, "Found %d device(s)\n", found)
 		}
