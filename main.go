@@ -61,42 +61,45 @@ func main() {
 
 	found := 0
 
-	select {
-	case <-done:
-		if found == 0 {
-			fmt.Fprintf(os.Stderr, "No device found\n")
-			os.Exit(9)
-		} else {
-			fmt.Fprintf(os.Stderr, "Found %d device(s)\n", found)
-		}
-	case result := <-resultsChan:
-		// print header
-		if found == 0 && !*ipOnly {
-			fmt.Printf("IPv4 Address \tHostname \tDevice Type \tWeb UI\n")
-		}
+	for {
 
-		deviceType := "Unknown"
-		switch result.service {
-		case "_shunkei_vtx_rx._tcp":
-			deviceType = "Shunkei VTX Receiver"
-		case "_shunkei_vtx_tx._tcp":
-			deviceType = "Shunkei VTX Transmitter"
-		}
-
-		if *ipOnly {
-			if *first {
-				fmt.Printf("%v", result.ipv4)
+		select {
+		case <-done:
+			if found == 0 {
+				fmt.Fprintf(os.Stderr, "No device found\n")
+				os.Exit(9)
 			} else {
-				fmt.Printf("%v\n", result.ipv4)
+				fmt.Fprintf(os.Stderr, "Found %d device(s)\n", found)
 			}
-		} else {
-			fmt.Printf("%v \t%v \t%v\thttp://%v/\n", result.ipv4, result.hostname, deviceType, result.ipv4)
-		}
+		case result := <-resultsChan:
+			// print header
+			if found == 0 && !*ipOnly {
+				fmt.Printf("IPv4 Address \tHostname \tDevice Type \tWeb UI\n")
+			}
 
-		found++
+			deviceType := "Unknown"
+			switch result.service {
+			case "_shunkei_vtx_rx._tcp":
+				deviceType = "Shunkei VTX Receiver"
+			case "_shunkei_vtx_tx._tcp":
+				deviceType = "Shunkei VTX Transmitter"
+			}
 
-		if *first {
-			os.Exit(0)
+			if *ipOnly {
+				if *first {
+					fmt.Printf("%v", result.ipv4)
+				} else {
+					fmt.Printf("%v\n", result.ipv4)
+				}
+			} else {
+				fmt.Printf("%v \t%v \t%v\thttp://%v/\n", result.ipv4, result.hostname, deviceType, result.ipv4)
+			}
+
+			found++
+
+			if *first {
+				os.Exit(0)
+			}
 		}
 	}
 }
