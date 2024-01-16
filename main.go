@@ -22,7 +22,7 @@ func main() {
 	flag.Parse()
 
 	// In first-exit mode, timeout may be at least 5 seconds
-	if !*first && *timeout < 5 {
+	if *first && *timeout < 5 {
 		*timeout = 5
 	}
 
