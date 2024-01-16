@@ -1,7 +1,5 @@
 github.com/cenkalti/backoff v2.2.1+incompatible h1:tNowT99t7UNflLxfYYSlKYsBpXdEet03Pg2g16Swow4=
 github.com/cenkalti/backoff v2.2.1+incompatible/go.mod h1:90ReRw6GdpyfrHakVjL/QHaoyV4aDUVVkXQJJJ3NXXM=
-github.com/ebiyu/zeroconf v1.1.0 h1:wPiUdV6v9b+AZuN5iOevuVcZ9dMupwVZFyCkd4he+sY=
-github.com/ebiyu/zeroconf v1.1.0/go.mod h1:ZwDPZHPrV+D4C+eLvwopyQPAZYnil3m5+CF9qyux8gA=
 github.com/ebiyu/zeroconf v1.1.1 h1:LfRuC1yq6UP/8+1I1dEyTDhZa/BB3Uv2rLihB1XsEYM=
 github.com/ebiyu/zeroconf v1.1.1/go.mod h1:ZwDPZHPrV+D4C+eLvwopyQPAZYnil3m5+CF9qyux8gA=
 github.com/miekg/dns v1.1.41 h1:WMszZWJG0XmzbK9FEmzH2TVcqYzFesusSIB41b8KHxY=
