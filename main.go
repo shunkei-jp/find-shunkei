@@ -18,6 +18,7 @@ func main() {
 	receiver := flag.Bool("rx", false, "Print only receiver")
 	transmitter := flag.Bool("tx", false, "Print only transmitter")
 	first := flag.Bool("1", false, "Exit after first device found")
+	ipOnly := flag.Bool("ip-only", false, "Print only IP address")
 	flag.Parse()
 
 	// In first-exit mode, timeout may be at least 5 seconds
@@ -70,7 +71,7 @@ func main() {
 		}
 	case result := <-resultsChan:
 		// print header
-		if found == 0 {
+		if found == 0 && !*ipOnly {
 			fmt.Printf("IPv4 Address \tHostname \tDevice Type \tWeb UI\n")
 		}
 
@@ -82,7 +83,16 @@ func main() {
 			deviceType = "Shunkei VTX Transmitter"
 		}
 
-		fmt.Printf("%v \t%v \t%v\thttp://%v/\n", result.ipv4, result.hostname, deviceType, result.ipv4)
+		if *ipOnly {
+			if *first {
+				fmt.Printf("%v", result.ipv4)
+			} else {
+				fmt.Printf("%v\n", result.ipv4)
+			}
+		} else {
+			fmt.Printf("%v \t%v \t%v\thttp://%v/\n", result.ipv4, result.hostname, deviceType, result.ipv4)
+		}
+
 		found++
 
 		if *first {
