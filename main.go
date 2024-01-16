@@ -70,6 +70,7 @@ func main() {
 				os.Exit(9)
 			} else {
 				fmt.Fprintf(os.Stderr, "Found %d device(s)\n", found)
+				os.Exit(0)
 			}
 		case result := <-resultsChan:
 			// print header
