@@ -6,6 +6,7 @@ import (
 	"fmt"
 	"log"
 	"net"
+	"os"
 	"sync"
 	"time"
 
@@ -13,12 +14,30 @@ import (
 )
 
 func main() {
-	timeout := flag.Int("t", 1, "timeout")
+	timeout := flag.Int("t", 2, "timeout")
+	receiver := flag.Bool("rx", false, "Print only receiver")
+	transmitter := flag.Bool("tx", false, "Print only transmitter")
+	first := flag.Bool("1", false, "Exit after first device found")
 	flag.Parse()
 
-	fmt.Printf("IPv4 \thostname \tservice\n")
+	// In first-exit mode, timeout may be at least 5 seconds
+	if !*first && *timeout < 5 {
+		*timeout = 5
+	}
 
-	var queryes = []string{"_shunkei_vtx_tx._tcp", "_shunkei_vtx_rx._tcp"}
+	var queryes = []string{}
+
+	if !*receiver && !*transmitter {
+		*receiver = true
+		*transmitter = true
+	}
+
+	if *receiver {
+		queryes = append(queryes, "_shunkei_vtx_rx._tcp")
+	}
+	if *transmitter {
+		queryes = append(queryes, "_shunkei_vtx_tx._tcp")
+	}
 
 	resultsChan := make(chan LookupResult)
 
@@ -39,14 +58,37 @@ func main() {
 		close(done)
 	}()
 
+	found := 0
+
 	select {
 	case <-done:
-		fmt.Println("done")
+		if found == 0 {
+			fmt.Fprintf(os.Stderr, "No device found\n")
+			os.Exit(1)
+		} else {
+			fmt.Fprintf(os.Stderr, "Found %d device(s)\n", found)
+		}
 	case result := <-resultsChan:
-		fmt.Printf("%v \t%v \t%v\thttp://%v/\n", result.ipv4, result.hostname, result.service, result.ipv4)
-	}
+		// print header
+		if found == 0 {
+			fmt.Printf("IPv4 Address \tHostname \tDevice Type \tWeb UI\n")
+		}
 
-	<-done
+		deviceType := "Unknown"
+		switch result.service {
+		case "_shunkei_vtx_rx._tcp":
+			deviceType = "Shunkei VTX Receiver"
+		case "_shunkei_vtx_tx._tcp":
+			deviceType = "Shunkei VTX Transmitter"
+		}
+
+		fmt.Printf("%v \t%v \t%v\thttp://%v/\n", result.ipv4, result.hostname, deviceType, result.ipv4)
+		found++
+
+		if *first {
+			os.Exit(0)
+		}
+	}
 }
 
 type LookupResult struct {
