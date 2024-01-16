@@ -5,8 +5,12 @@
 検索には DNS-SD (mDNS) を利用しているため、マルチキャストパケットが到達する環境(同一L2内など)である必要があります。
 
 ## Installation
+### バイナリをダウンロード
 
-### Goを用いたインストール
+[GitHub Releases](https://github.com/shunkei-jp/find-shunkei/releases) からバイナリをダウンロードし、
+パスの通った場所に配置してください。
+
+### go install
 
 Goがインストールされている環境であれば `go install` を用いてインストールすることが可能です。
 
