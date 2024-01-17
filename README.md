@@ -40,6 +40,13 @@ find-shunkei -ip-only -rx -1 # 受信機のみを検索し、最初の一台が�
 
 エラーが発生した場合は終了コード1を返します。
 
+## お問い合わせ
+
+質問・バグ報告・活用事例の報告などは、[Shunkei Github discussions](https://github.com/orgs/shunkei-jp/discussions) へご投稿ください。
+機能追加に関する要望や検討中の利用事例なども投稿いただければ、今後の開発方針に参考にさせていただきます。
+
+公開したくないお問い合せは [お問い合わせフォーム](https://docs.google.com/forms/d/e/1FAIpQLSdW6nHX65omXpBzfH-S1-7y5yRUXsz7jtYAO0YHv2naIvSpBg/viewform) までお寄せください。
+
 ## Development
 
 開発時には `main.go` を直接実行してください。
