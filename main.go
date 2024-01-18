@@ -19,6 +19,7 @@ func main() {
 	transmitter := flag.Bool("tx", false, "Print only transmitter")
 	first := flag.Bool("1", false, "Exit after first device found")
 	ipOnly := flag.Bool("ip-only", false, "Print only IP address")
+	printHost := flag.Bool("host", false, "Print hostname")
 	flag.Parse()
 
 	// In first-exit mode, timeout may be at least 5 seconds
@@ -75,7 +76,11 @@ func main() {
 		case result := <-resultsChan:
 			// print header
 			if found == 0 && !*ipOnly {
-				fmt.Printf("IPv4 Address \tHostname \tDevice Type \tWeb UI\n")
+				if *printHost {
+					fmt.Printf("IPv4 Address \tHostname \tDevice Type \tWeb UI\n")
+				} else {
+					fmt.Printf("IPv4 Address \tDevice Type \tWeb UI\n")
+				}
 			}
 
 			deviceType := "Unknown"
@@ -93,7 +98,11 @@ func main() {
 					fmt.Printf("%v\n", result.ipv4)
 				}
 			} else {
-				fmt.Printf("%v \t%v \t%v\thttp://%v/\n", result.ipv4, result.hostname, deviceType, result.ipv4)
+				if *printHost {
+					fmt.Printf("%v \t%v \t%v\thttp://%v/\n", result.ipv4, result.hostname, deviceType, result.ipv4)
+				} else {
+					fmt.Printf("%v \t%v\thttp://%v/\n", result.ipv4, deviceType, result.ipv4)
+				}
 			}
 
 			found++
