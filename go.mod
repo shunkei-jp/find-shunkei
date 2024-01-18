@@ -11,4 +11,3 @@ require (
 	golang.org/x/sys v0.0.0-20210426080607-c94f62235c83 // indirect
 )
 
-replace github.com/grandcat/zeroconf => ../../grandcat/zeroconf
