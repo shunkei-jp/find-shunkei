@@ -29,9 +29,11 @@ func main() {
 
 	var queryes = []string{}
 
-	if !*receiver && !*transmitter {
+	var lite = false
+	if !*receiver && !*transmitter && !lite {
 		*receiver = true
 		*transmitter = true
+		lite = true
 	}
 
 	if *receiver {
@@ -39,6 +41,9 @@ func main() {
 	}
 	if *transmitter {
 		queryes = append(queryes, "_shunkei_vtx_tx._tcp")
+	}
+	if lite {
+		queryes = append(queryes, "_shunkei_vtxlite_tx._tcp")
 	}
 
 	resultsChan := make(chan LookupResult)
@@ -89,6 +94,8 @@ func main() {
 				deviceType = "Shunkei VTX Receiver"
 			case "_shunkei_vtx_tx._tcp":
 				deviceType = "Shunkei VTX Transmitter"
+			case "_shunkei_vtxlite_tx._tcp":
+				deviceType = "Shunkei VTX Lite Transmitter"
 			}
 
 			if *ipOnly {
